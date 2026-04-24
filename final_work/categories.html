@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图书分类</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">图书馆</div>
+            <ul class="nav-links">
+                <li><a href="index.html">首页</a></li>
+                <li><a href="categories.html">图书分类</a></li>
+                <li><a href="contact.html">联系我们</a></li>
+                <li><a href="login.html" id="loginLink">登录</a></li>
+                <li id="userDisplay" style="display:none; color: var(--accent-color); font-weight: bold;"></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <div class="main-content-layout container">
+            <!-- 正文：图书分类 -->
+            <div class="content-area">
+                <section class="categories">
+                    <h1>全部分类</h1>
+                    <div class="category-list">
+                        <div class="category-item">
+                            <h3>文学</h3>
+                            <p>“文学是人类精神生活的火炬。”</p>
+                            <a href="book_list_lit.html" class="btn-small">查看更多</a>
+                        </div>
+                        <div class="category-item">
+                            <h3>科学</h3>
+                            <p>“科学不仅是知识体系，更是一种思考方式。”</p>
+                            <a href="book_list_sc.html" class="btn-small">查看更多</a>
+                        </div>
+                        <div class="category-item">
+                            <h3>历史</h3>
+                            <p>“一切历史都是当代史。”</p>
+                            <a href="book_list_hist.html" class="btn-small">查看更多</a>
+                        </div>
+                        <div class="category-item">
+                            <h3>艺术</h3>
+                            <p>“艺术洗去灵魂上的尘埃。”</p>
+                            <a href="book_list_art.html" class="btn-small">查看更多</a>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- 侧边栏 -->
+            <aside class="sidebar-area">
+                <div class="sidebar-widget">
+                    <h3>热门标签</h3>
+                    <div class="tag-cloud">
+                        <span class="tag">经典</span>
+                        <span class="tag">科幻</span>
+                        <span class="tag">传记</span>
+                        <span class="tag">哲学</span>
+                        <span class="tag">艺术史</span>
+                        <span class="tag">科普</span>
+                    </div>
+                </div>
+                <div class="sidebar-widget">
+                    <h3>本周借阅榜</h3>
+                    <ul class="rank-list">
+                        <li><span class="rank">1</span> 百年孤独</li>
+                        <li><span class="rank">2</span> 活着</li>
+                        <li><span class="rank">3</span> 时间简史</li>
+                        <li><span class="rank">4</span> 红楼梦</li>
+                    </ul>
+                </div>
+                <div class="sidebar-widget">
+                    <h3>图书馆数据</h3>
+                    <div class="stats-item">
+                        <span>藏书总量:</span>
+                        <strong>150,000+</strong>
+                    </div>
+                    <div class="stats-item">
+                        <span>本月借阅:</span>
+                        <strong>3,240</strong>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2024 图书馆. All rights reserved.</p>
+    </footer>
+    <button id="backToTop" class="back-to-top" onclick="window.scrollTo(0,0)">↑</button>
+    <script src="js/script.js"></script>
+</body>
+</html>

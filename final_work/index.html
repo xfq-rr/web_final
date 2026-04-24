@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>叮咚图书馆</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">叮咚图书馆</div>
+            <ul class="nav-links">
+                <li><a href="index.html">首页</a></li>
+                <li><a href="categories.html">图书分类</a></li>
+                <li><a href="contact.html">联系我们</a></li>
+                <li><a href="login.html" id="loginLink">登录</a></li>
+                <li id="userDisplay" style="display:none; color: var(--accent-color); font-weight: bold;"></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <!-- Banner 广告区 (图片切换) -->
+        <section class="banner-container">
+            <div class="banner-slider">
+                <div class="banner-slide active" style="background-image: url('https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=1600&q=80');">
+                    <div class="banner-content">
+                        <h2>知识启迪智慧</h2>
+                        <p>探索叮咚图书馆的海量珍藏</p>
+                    </div>
+                </div>
+                <div class="banner-slide" style="background-image: url('https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&w=1600&q=80');">
+                    <div class="banner-content">
+                        <h2>阅读连接世界</h2>
+                        <p>让每一本书都成为你的窗户</p>
+                    </div>
+                </div>
+            </div>
+            <div class="banner-nav">
+                <span class="dot active"></span>
+                <span class="dot"></span>
+            </div>
+        </section>
+
+        <section class="hero">
+            <h1>欢迎来到叮咚图书馆</h1>
+            <p>阅读知识，探索世界</p>
+            <a href="categories.html" class="btn">查看图书</a>
+        </section>
+
+        <div class="main-content-layout container">
+            <!-- 正文区 -->
+            <div class="content-area">
+                <section class="featured-books">
+                    <h2>推荐图书</h2>
+                    <p style="text-align:center; color: var(--text-light); margin-top: -30px; margin-bottom: 30px;">(可拖动图书到右侧购物车)</p>
+                    <div class="book-list">
+                        <div class="book-item" draggable="true" data-title="百年孤独">
+                            <img src="书实验.png" alt="图书封面">
+                            <h3>百年孤独</h3>
+                            <p>加西亚·马尔克斯</p>
+                            <a href="detail.html" class="btn-small">查看详情</a>
+                        </div>
+                        <div class="book-item" draggable="true" data-title="活着">
+                            <img src="书实验.png" alt="图书封面">
+                            <h3>活着</h3>
+                            <p>余华</p>
+                            <a href="detail.html" class="btn-small">查看详情</a>
+                        </div>
+                        <div class="book-item" draggable="true" data-title="红楼梦">
+                            <img src="书实验.png" alt="图书封面">
+                            <h3>红楼梦</h3>
+                            <p>曹雪芹</p>
+                            <a href="detail.html" class="btn-small">查看详情</a>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Canvas 图形绘制区 -->
+                <section class="canvas-section">
+                    <h2>图书馆精神</h2>
+                    <canvas id="libraryCanvas" width="600" height="150"></canvas>
+                </section>
+
+                <!-- 视频展示区 -->
+                <section class="video-section">
+                    <h2>馆内风采视频</h2>
+                    <div class="video-wrapper">
+                        <video controls poster="书实验.png" width="100%">
+                            <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+                            您的浏览器不支持视频标签。
+                        </video>
+                    </div>
+                </section>
+            </div>
+
+            <!-- 副栏区 (Sidebar) -->
+            <aside class="sidebar-area">
+                <div class="sidebar-widget cart-widget" id="cartZone">
+                    <h3>我的购物车</h3>
+                    <p class="cart-tip">将图书拖拽至此</p>
+                    <ul id="cartItems"></ul>
+                </div>
+                <div class="sidebar-widget">
+                    <h3>最新公告</h3>
+                    <ul class="news-list">
+                        <li>· 4月新书上架通知</li>
+                        <li>· 读书分享会报名开启</li>
+                        <li>· 馆内设备维护公告</li>
+                    </ul>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <!-- 浮动广告区 -->
+    <div class="floating-ad" id="floatAd">
+        <span class="close-ad">×</span>
+        <p>新用户借阅<br><strong>立减10元</strong></p>
+    </div>
+
+    <footer>
+        <div class="footer-content container">
+            <div class="footer-info">
+                <p>&copy; 2024 叮咚图书馆. All rights reserved.</p>
+                <p>技术支持：前端开发大作业团队</p>
+            </div>
+            <div class="share-links">
+                <span>分享到：</span>
+                <a href="#">微信</a>
+                <a href="#">微博</a>
+                <a href="#">QQ</a>
+            </div>
+        </div>
+    </footer>
+    <button id="backToTop" class="back-to-top" onclick="window.scrollTo(0,0)">↑</button>
+    <script src="js/script.js"></script>
+</body>
+</html>

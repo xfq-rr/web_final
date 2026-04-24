@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>书籍列表 - 图书馆</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">图书馆</div>
+            <ul class="nav-links">
+                <li><a href="index.html">首页</a></li>
+                <li><a href="categories.html">图书分类</a></li>
+                <li><a href="login.html">登录</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section class="book-list-container">
+            <h1>科学类别书籍</h1>
+            <p class="category-description">在这里可以找到所有的科学类书籍。</p>    
+            <div class="book-grid">
+                <!-- 书籍卡片示例 -->
+                <div class="book-card" onclick="location.href='detail.html'">
+                    <img src="书实验.png" alt="图书封面">
+                    <div class="book-card-info">
+                        <h3>物种起源</h3>
+                        <p>Charles Darwin</p>
+                        <span class="status available">可借阅</span>
+                    </div>
+                </div>
+                <div class="book-card" onclick="location.href='detail.html'">
+                    <img src="书实验.png" alt="图书封面">
+                    <div class="book-card-info">
+                        <h3>时间简史</h3>
+                        <p>Stephen Hawking</p>
+                        <span class="status available">可借阅</span>
+                    </div>
+                </div>
+                <div class="book-card" onclick="location.href='detail.html?status=borrowed'">
+                    <img src="书实验.png" alt="图书封面">
+                    <div class="book-card-info">
+                        <h3>自然哲学的数学原理</h3>
+                        <p>Isaac Newton</p>
+                        <span class="status borrowed">已借出</span>
+                    </div>
+                </div>
+                <div class="book-card" onclick="location.href='detail.html'">
+                    <img src="书实验.png" alt="图书封面">
+                    <div class="book-card-info">
+                        <h3>关于两大世界体系的对话</h3>
+                        <p>Galileo Galilei</p>
+                        <span class="status available">可借阅</span>
+                    </div>
+                </div>
+            </div>
+            <div class="pagination">
+                <a href="#" class="btn-small">上一页</a>
+                <span class="page-num">1 / 5</span>
+                <a href="#" class="btn-small">下一页</a>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 图书馆. All rights reserved.</p>
+    </footer>
+    <button id="backToTop" class="back-to-top" onclick="window.scrollTo(0,0)">↑</button>
+    <script src="js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图书详情</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">叮咚图书馆</div>
+            <ul class="nav-links">
+                <li><a href="index.html">首页</a></li>
+                <li><a href="categories.html">图书分类</a></li>
+                <li><a href="contact.html">联系我们</a></li>
+                <li><a href="login.html" id="loginLink">登录</a></li>
+                <li id="userDisplay" style="display:none; color: var(--accent-color); font-weight: bold;"></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <div class="back-link">
+            <a href="javascript:history.back()">&larr; 返回上一页</a>
+        </div>
+        <section class="book-detail">
+            <div class="book-cover">
+                <img src="书实验.png" alt="图书封面">
+            </div>
+            <div class="book-info">
+                <h1>书名示例</h1>
+                <p><strong>作者:</strong> 作者示例</p>
+                <p><strong>出版社:</strong> 出版社示例</p>
+                <p><strong>出版日期:</strong> 2023-01-01</p>
+                <p><strong>ISBN:</strong> 978-1234567890</p>
+                <p><strong>简介:</strong> 这是一本关于...的图书。它深入探讨了...，并提供了...的见解。本书适合...阅读。</p>
+                <button class="btn">借阅</button>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 图书馆. All rights reserved.</p>
+    </footer>
+    <button id="backToTop" class="back-to-top" onclick="window.scrollTo(0,0)">↑</button>
+    <script src="js/script.js"></script>
+</body>
+</html>

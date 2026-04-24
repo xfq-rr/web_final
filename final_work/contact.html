@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>联系我们 - 叮咚图书馆</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">叮咚图书馆</div>
+            <ul class="nav-links">
+                <li><a href="index.html">首页</a></li>
+                <li><a href="categories.html">图书分类</a></li>
+                <li><a href="contact.html">联系我们</a></li>
+                <li><a href="login.html" id="loginLink">登录</a></li>
+                <li id="userDisplay" style="display:none; color: var(--accent-color); font-weight: bold;"></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section class="contact-container container">
+            <div class="contact-header">
+                <h1>联系我们</h1>
+                <p>如有任何问题或建议，请随时与我们联系。</p>
+            </div>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <div class="info-item">
+                        <h3>图书馆地址</h3>
+                        <p>xx市xx区xx路123号</p>
+                    </div>
+                    <div class="info-item">
+                        <h3>联系电话</h3>
+                        <p>010-12345678</p>
+                    </div>
+                    <div class="info-item">
+                        <h3>电子邮箱</h3>
+                        <p>support@dingdonglib.com</p>
+                    </div>
+                </div>
+                <div class="contact-form-wrapper glass-effect">
+                    <form id="contactForm" class="contact-form">
+                        <div class="input-group">
+                            <label for="name">姓名:</label>
+                            <input type="text" id="name" name="name" required placeholder="您的姓名">
+                        </div>
+                        <div class="input-group">
+                            <label for="email">邮箱:</label>
+                            <input type="email" id="email" name="email" required placeholder="您的电子邮箱">
+                        </div>
+                        <div class="input-group">
+                            <label for="subject">主题:</label>
+                            <select id="subject" name="subject">
+                                <option value="suggestion">意见建议</option>
+                                <option value="complaint">投诉反馈</option>
+                                <option value="cooperation">商务合作</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="message">留言内容:</label>
+                            <textarea id="message" name="message" required rows="5" placeholder="请输入您的留言..."></textarea>
+                        </div>
+                        <button type="submit" class="btn">发送消息</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <div class="footer-content container">
+            <div class="footer-info">
+                <p>&copy; 2024 叮咚图书馆. All rights reserved.</p>
+                <p>技术支持：前端开发大作业团队</p>
+            </div>
+            <div class="share-links">
+                <span>分享到：</span>
+                <a href="#">微信</a>
+                <a href="#">微博</a>
+                <a href="#">QQ</a>
+            </div>
+        </div>
+    </footer>
+    <button id="backToTop" class="back-to-top" onclick="window.scrollTo(0,0)">↑</button>
+    <script src="js/script.js"></script>
+</body>
+</html>
