@@ -861,12 +861,13 @@ footer {
 }
 
 .banner-content {
-    background: rgba(0,0,0,0.5);
-    color: #fff;
-    padding: 30px 50px;
-    border-radius: 10px;
-    backdrop-filter: blur(5px);
-    text-align: center;
+    background:rgba(0,0,0,0.2);
+    color:#fff;
+    padding:20px 40px;
+    border-radius:12px;
+    backdrop-filter:blur(8px);
+    text-align:center;
+    border:1px solid rgba(255,255,255,0.1);
 }
 
 .banner-content h2 { font-size: 36px; margin-bottom: 10px; letter-spacing: 4px; }

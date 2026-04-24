@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         ctx.font = '16px "Noto Serif SC", serif';
         ctx.fillStyle = '#666';
-        ctx.fillText('—— 叮咚图书馆，与你一同成长', canvas.width / 2, 120);
+        ctx.fillText('—— 龚达图书馆，与你一同成长', canvas.width / 2, 120);
     };
     initCanvas();
 
@@ -246,7 +246,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const statusNotice = document.createElement('p');
             statusNotice.style.color = '#c62828';
             statusNotice.style.fontWeight = 'bold';
-            statusNotice.innerHTML = '⚠️ 此图书目前不在馆内，预计归还时间：2024-05-15';
+            statusNotice.innerHTML = '⚠️ 此图书目前不在馆内，预计归还时间：2026-05-15';
             infoArea.insertBefore(statusNotice, borrowButton);
         } else {
             borrowButton.addEventListener('click', () => {
