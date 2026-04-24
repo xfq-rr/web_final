@@ -227,7 +227,51 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- 9. 详情页借阅逻辑 (智能判断已借出状态) ---
+    // --- 9. 详情页动态数据填充 ---
+    const initDetailPage = () => {
+        const bookData = {
+            "物种起源": { author: "达尔文", publisher: "商务印书馆", isbn: "978-7100010122", desc: "进化论的奠基之作，用大量证据提出了自然选择学说，彻底改变了人类对生命起源与演化的认知。" },
+            "时间简史": { author: "霍金", publisher: "湖南科学技术出版社", isbn: "978-7535732309", desc: "用通俗语言讲述宇宙起源、黑洞、时间与空间的奥秘，让普通人也能理解复杂的物理学概念。" },
+            "自然哲学的数学原理": { author: "牛顿", publisher: "北京大学出版社", isbn: "978-7301085521", desc: "经典力学的里程碑，系统阐述了万有引力定律与三大运动定律，奠定了近代物理学的基础。" },
+            "关于两大世界体系的对话": { author: "伽利略", publisher: "上海人民出版社", isbn: "978-7208123456", desc: "以对话形式论证日心说，挑战了当时的权威观点，推动了科学思想的解放与天文学的革命。" },
+            "史记": { author: "司马迁", publisher: "中华书局", isbn: "978-7101003048", desc: "中国第一部纪传体通史，记载了从黄帝到汉武帝时期的历史，被誉为 “史家之绝唱，无韵之离骚”。" },
+            "资治通鉴": { author: "司马光", publisher: "中华书局", isbn: "978-7101000122", desc: "编年体通史巨著，以时间为线索梳理历代兴衰，旨在为统治者提供治国理政的历史借鉴。" },
+            "明朝那些事儿": { author: "当年明月", publisher: "浙江人民出版社", isbn: "978-7213040603", desc: "以幽默通俗的语言讲述明朝三百年历史，让枯燥的史料变得生动有趣，是现象级的历史读物。" },
+            "罗马帝国衰亡史": { author: "吉本", publisher: "商务印书馆", isbn: "978-7100023456", desc: "西方史学经典，全面分析了罗马帝国从鼎盛到衰落的过程与原因，影响了后世对古代帝国的研究。" },
+            "艺术的故事": { author: "贡布里希", publisher: "广西美术出版社", isbn: "978-7806745532", desc: "艺术史入门经典，以清晰的脉络讲述艺术从原始到现代的发展，帮助读者理解艺术背后的思想与变革。" },
+            "机械复制时代的艺术作品": { author: "本雅明", publisher: "浙江摄影出版社", isbn: "978-7805364567", desc: "探讨摄影、电影等复制技术对艺术的影响，提出了 “光晕” 等重要概念，深刻影响了现代艺术理论。" },
+            "名画家传": { author: "瓦萨里", publisher: "湖北美术出版社", isbn: "978-7539412345", desc: "西方第一部艺术史著作，记录了文艺复兴时期艺术家的生平与作品，是研究早期艺术的重要文献。" },
+            "艺术与错觉": { author: "贡布里希", publisher: "广西美术出版社", isbn: "978-7806745533", desc: "从心理学角度分析艺术创作与感知的关系，探讨艺术家如何利用视觉规律创造出逼真的效果。" },
+            "百年孤独": { author: "马尔克斯", publisher: "南海出版公司", isbn: "978-7544253994", desc: "魔幻现实主义文学的代表作，讲述布恩迪亚家族七代人的命运，展现了拉丁美洲的百年沧桑与孤独。" },
+            "活着": { author: "余华", publisher: "作家出版社", isbn: "978-7506365437", desc: "以平实的笔触讲述主人公福贵的一生，在苦难中展现生命的韧性与力量，充满对人性与命运的深刻思考。" },
+            "红楼梦": { author: "曹雪芹", publisher: "人民文学出版社", isbn: "978-7020002023", desc: "中国古典小说的巅峰之作，以贾府兴衰为背景，描绘了封建社会的人情冷暖与家族命运，细节与思想深度兼具。" },
+            "围城": { author: "钱钟书", publisher: "人民文学出版社", isbn: "978-7020019328", desc: "以方鸿渐的人生经历为主线，讽刺了知识分子的虚伪与困境，“围城” 的隐喻成为对婚姻与人生困境的经典概括。" }
+        };
+
+        const params = new URLSearchParams(window.location.search);
+        const title = params.get('title');
+        if (!title || !bookData[title]) return;
+
+        const book = bookData[title];
+        const elements = {
+            title: document.getElementById('bookTitle'),
+            author: document.getElementById('bookAuthor'),
+            publisher: document.getElementById('bookPublisher'),
+            isbn: document.getElementById('bookIsbn'),
+            desc: document.getElementById('bookDesc')
+        };
+
+        if (elements.title) elements.title.textContent = title;
+        if (elements.author) elements.author.textContent = book.author;
+        if (elements.publisher) elements.publisher.textContent = book.publisher;
+        if (elements.isbn) elements.isbn.textContent = book.isbn;
+        if (elements.desc) elements.desc.textContent = book.desc;
+        
+        document.title = `${title} - 图书详情`;
+    };
+    initDetailPage();
+
+    // --- 10. 详情页借阅逻辑 (智能判断已借出状态) ---
     const initBorrowLogic = () => {
         const borrowButton = document.querySelector('.book-detail .btn');
         if (!borrowButton) return;
