@@ -131,14 +131,48 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- 6. 拖放功能 (Drag & Drop) ---
     const initDragDrop = () => {
-        const books = document.querySelectorAll('.book-item');
+        const books = document.querySelectorAll('.book-item, .book-card');
         const cartZone = document.getElementById('cartZone');
         const cartItems = document.getElementById('cartItems');
         if (!cartZone || !cartItems) return;
 
+        // 从 localStorage 加载购物车
+        const loadCart = () => {
+            const savedCart = JSON.parse(localStorage.getItem('library_cart') || '[]');
+            cartItems.innerHTML = '';
+            if (savedCart.length > 0) {
+                document.querySelector('.cart-tip').style.display = 'none';
+                savedCart.forEach((title, index) => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<span>📖 ${title}</span><button class="remove-item" data-index="${index}">×</button>`;
+                    cartItems.appendChild(li);
+                });
+            } else {
+                document.querySelector('.cart-tip').style.display = 'block';
+            }
+        };
+
+        const saveCart = (title) => {
+            const savedCart = JSON.parse(localStorage.getItem('library_cart') || '[]');
+            savedCart.push(title);
+            localStorage.setItem('library_cart', JSON.stringify(savedCart));
+            loadCart();
+        };
+
+        const removeFromCart = (index) => {
+            const savedCart = JSON.parse(localStorage.getItem('library_cart') || '[]');
+            savedCart.splice(index, 1);
+            localStorage.setItem('library_cart', JSON.stringify(savedCart));
+            loadCart();
+        };
+
+        loadCart();
+
         books.forEach(book => {
+            book.setAttribute('draggable', 'true');
             book.addEventListener('dragstart', (e) => {
-                e.dataTransfer.setData('text/plain', book.getAttribute('data-title'));
+                const title = book.getAttribute('data-title') || book.querySelector('h3').textContent;
+                e.dataTransfer.setData('text/plain', title);
                 book.style.opacity = '0.5';
             });
             book.addEventListener('dragend', () => {
@@ -160,16 +194,74 @@ document.addEventListener('DOMContentLoaded', () => {
             cartZone.classList.remove('drag-over');
             const bookTitle = e.dataTransfer.getData('text/plain');
             if (bookTitle) {
-                const li = document.createElement('li');
-                li.textContent = `📖 ${bookTitle}`;
-                cartItems.appendChild(li);
-                // 动画提示
-                li.style.animation = 'fadeInUp 0.3s forwards';
-                document.querySelector('.cart-tip').style.display = 'none';
+                saveCart(bookTitle);
             }
         });
+
+        cartItems.addEventListener('click', (e) => {
+            if (e.target.classList.contains('remove-item')) {
+                removeFromCart(e.target.getAttribute('data-index'));
+            }
+        });
+
+        // 添加结算按钮
+        if (!document.getElementById('checkoutBtn')) {
+            const checkoutBtn = document.createElement('button');
+            checkoutBtn.id = 'checkoutBtn';
+            checkoutBtn.className = 'btn-small';
+            checkoutBtn.style.width = '100%';
+            checkoutBtn.style.marginTop = '10px';
+            checkoutBtn.textContent = '立即借阅';
+            checkoutBtn.onclick = () => {
+                const savedCart = JSON.parse(localStorage.getItem('library_cart') || '[]');
+                if (savedCart.length === 0) {
+                    alert('购物车是空的！');
+                    return;
+                }
+                alert(`成功借阅 ${savedCart.length} 本书！`);
+                localStorage.removeItem('library_cart');
+                loadCart();
+            };
+            cartZone.appendChild(checkoutBtn);
+        }
     };
     initDragDrop();
+
+    // --- 11. 全局搜索功能 ---
+    const initSearch = () => {
+        const searchInput = document.getElementById('searchInput');
+        const searchBtn = document.getElementById('searchBtn');
+        if (!searchInput || !searchBtn) return;
+
+        const performSearch = () => {
+            const query = searchInput.value.trim().toLowerCase();
+            if (!query) return;
+
+            // 搜索逻辑：在 bookData 中查找
+            const results = Object.keys(bookData).filter(title => 
+                title.toLowerCase().includes(query) || 
+                bookData[title].author.toLowerCase().includes(query)
+            );
+
+            if (results.length > 0) {
+                // 如果只有一个结果，直接跳转到详情页
+                if (results.length === 1) {
+                    window.location.href = `detail.html?title=${encodeURIComponent(results[0])}`;
+                } else {
+                    // 多个结果，提示用户（实际开发中应跳转到搜索结果页，这里简化处理）
+                    alert(`找到 ${results.length} 本相关书籍：\n${results.join('\n')}\n\n请尝试更精确的搜索。`);
+                }
+            } else {
+                alert('未找到相关书籍，请尝试其他关键词。');
+            }
+        };
+
+        searchBtn.addEventListener('click', performSearch);
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') performSearch();
+        });
+    };
+    initSearch();
 
     // --- 7. 浮动广告逻辑 ---
     const initFloatAd = () => {
@@ -302,4 +394,40 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
     initBorrowLogic();
+
+    // --- 12. 分页逻辑 ---
+    const initPagination = () => {
+        const prevBtn = document.querySelector('.pagination .btn-small:first-child');
+        const nextBtn = document.querySelector('.pagination .btn-small:last-child');
+        const pageNum = document.querySelector('.pagination .page-num');
+        if (!prevBtn || !nextBtn || !pageNum) return;
+
+        let currentPage = 1;
+        const totalPages = 1; // 目前只有一页数据
+
+        pageNum.textContent = `${currentPage} / ${totalPages}`;
+
+        prevBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (currentPage > 1) {
+                currentPage--;
+                pageNum.textContent = `${currentPage} / ${totalPages}`;
+                alert(`已切换至第 ${currentPage} 页`);
+            } else {
+                alert('已经是第一页了');
+            }
+        });
+
+        nextBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (currentPage < totalPages) {
+                currentPage++;
+                pageNum.textContent = `${currentPage} / ${totalPages}`;
+                alert(`已切换至第 ${currentPage} 页`);
+            } else {
+                alert('已经是最后一页了');
+            }
+        });
+    };
+    initPagination();
 });

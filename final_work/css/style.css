@@ -209,6 +209,37 @@ header nav {
     margin: 0 auto;
 }
 
+.search-bar {
+    display: flex;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 5px 15px;
+    margin: 0 20px;
+    flex: 1;
+    max-width: 400px;
+}
+
+.search-bar input {
+    background: none;
+    border: none;
+    color: #fff;
+    padding: 5px;
+    width: 100%;
+    outline: none;
+}
+
+.search-bar input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.search-bar button {
+    background: none;
+    border: none;
+    color: var(--accent-color);
+    cursor: pointer;
+    font-weight: bold;
+}
+
 header .logo {
     font-size: 24px;
     font-weight: 700;
@@ -219,15 +250,9 @@ header .logo {
     text-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
 
-header .logo::before {
-    content: '📚';
-    font-size: 28px;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
-}
-
-header .nav-links {
-    display: flex;
+.nav-links {
     list-style: none;
+    display: flex;
     gap: 40px;
 }
 
@@ -971,7 +996,44 @@ footer {
 .cart-tip { text-align: center; color: var(--text-light); margin-top: 40px; font-style: italic; }
 
 #cartItems { list-style: none; }
-#cartItems li { background: #f8f6f3; padding: 10px; margin-bottom: 8px; border-radius: 6px; font-size: 14px; box-shadow: 2px 2px 5px rgba(0,0,0,0.05); }
+#cartItems li {
+    padding: 10px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    animation: fadeInUp 0.3s forwards;
+}
+
+#cartItems li span {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-right: 10px;
+}
+
+.remove-item {
+    background: #ff5252;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s;
+}
+
+.remove-item:hover {
+    background: #ff1744;
+}
+
+/* 分页样式优化 */
 
 /* Canvas & Video 区域 */
 .canvas-section, .video-section {
@@ -1087,6 +1149,24 @@ footer {
     .main-content-layout { flex-direction: column; }
     .contact-content { grid-template-columns: 1fr; }
     .banner-container { height: 300px; }
+}
+
+@media (max-width: 768px) {
+    header nav {
+        flex-direction: column;
+        height: auto;
+        padding: 10px 0;
+    }
+    .search-bar {
+        margin: 10px 0;
+        width: 100%;
+        max-width: none;
+    }
+    .nav-links {
+        gap: 15px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
 }
 
 /* 响应式设计 */

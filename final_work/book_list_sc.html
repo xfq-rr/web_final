@@ -9,11 +9,17 @@
 <body>
     <header>
         <nav>
-            <div class="logo">图书馆</div>
+            <div class="logo">龚达图书馆</div>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="搜索书名/作者...">
+                <button id="searchBtn">搜索</button>
+            </div>
             <ul class="nav-links">
                 <li><a href="index.html">首页</a></li>
                 <li><a href="categories.html">图书分类</a></li>
-                <li><a href="login.html">登录</a></li>
+                <li><a href="contact.html">联系我们</a></li>
+                <li><a href="login.html" id="loginLink">登录</a></li>
+                <li id="userDisplay" style="display:none; color: var(--accent-color); font-weight: bold;"></li>
             </ul>
         </nav>
     </header>
@@ -64,7 +70,18 @@
         </section>
     </main>
     <footer>
-        <p>&copy; 2026 图书馆. All rights reserved.</p>
+        <div class="footer-content container">
+            <div class="footer-info">
+                <p>&copy; 2026 龚达图书馆. All rights reserved.</p>
+                <p>技术支持：前端开发大作业团队</p>
+            </div>
+            <div class="share-links">
+                <span>分享到：</span>
+                <a href="#">微信</a>
+                <a href="#">微博</a>
+                <a href="#">QQ</a>
+            </div>
+        </div>
     </footer>
     <button id="backToTop" class="back-to-top" onclick="window.scrollTo(0,0)">↑</button>
     <script src="js/script.js"></script>

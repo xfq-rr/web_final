@@ -9,7 +9,11 @@
 <body>
     <header>
         <nav>
-            <div class="logo">图书馆</div>
+            <div class="logo">龚达图书馆</div>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="搜索书名/作者...">
+                <button id="searchBtn">搜索</button>
+            </div>
             <ul class="nav-links">
                 <li><a href="index.html">首页</a></li>
                 <li><a href="categories.html">图书分类</a></li>
@@ -64,10 +68,10 @@
                 <div class="sidebar-widget">
                     <h3>本周借阅榜</h3>
                     <ul class="rank-list">
-                        <li><span class="rank">1</span><a href="detail.html">百年孤独</a></li>
-                        <li><span class="rank">2</span><a href="detail.html">活着</a></li>
-                        <li><span class="rank">3</span><a href="detail.html">时间简史</a></li>
-                        <li><span class="rank">4</span><a href="detail.html">红楼梦</a></li>
+                        <li><span class="rank">1</span><a href="detail.html?title=百年孤独">百年孤独</a></li>
+                        <li><span class="rank">2</span><a href="detail.html?title=活着">活着</a></li>
+                        <li><span class="rank">3</span><a href="detail.html?title=时间简史">时间简史</a></li>
+                        <li><span class="rank">4</span><a href="detail.html?title=红楼梦">红楼梦</a></li>
                     </ul>
                 </div>
                 <div class="sidebar-widget">
@@ -85,7 +89,18 @@
         </div>
     </main>
     <footer>
-        <p>&copy; 2026 图书馆. All rights reserved.</p>
+        <div class="footer-content container">
+            <div class="footer-info">
+                <p>&copy; 2026 龚达图书馆. All rights reserved.</p>
+                <p>技术支持：前端开发大作业团队</p>
+            </div>
+            <div class="share-links">
+                <span>分享到：</span>
+                <a href="#">微信</a>
+                <a href="#">微博</a>
+                <a href="#">QQ</a>
+            </div>
+        </div>
     </footer>
     <button id="backToTop" class="back-to-top" onclick="window.scrollTo(0,0)">↑</button>
     <script src="js/script.js"></script>
