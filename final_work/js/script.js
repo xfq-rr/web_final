@@ -350,7 +350,8 @@ document.addEventListener('DOMContentLoaded', () => {
             author: document.getElementById('bookAuthor'),
             publisher: document.getElementById('bookPublisher'),
             isbn: document.getElementById('bookIsbn'),
-            desc: document.getElementById('bookDesc')
+            desc: document.getElementById('bookDesc'),
+            cover: document.querySelector('.book-cover img')
         };
 
         if (elements.title) elements.title.textContent = title;
@@ -358,6 +359,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (elements.publisher) elements.publisher.textContent = book.publisher;
         if (elements.isbn) elements.isbn.textContent = book.isbn;
         if (elements.desc) elements.desc.textContent = book.desc;
+        if (elements.cover) {
+            // 处理特殊文件名不匹配的情况
+            let fileName = title;
+            if (title === "关于两大世界体系的对话") fileName = "关于世界两大体系的对话";
+            elements.cover.src = `images/${fileName}.png`;
+            elements.cover.alt = title;
+        }
         
         document.title = `${title} - 图书详情`;
     };
