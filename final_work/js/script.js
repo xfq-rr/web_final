@@ -253,6 +253,14 @@ document.addEventListener('DOMContentLoaded', () => {
             book.setAttribute('draggable', 'true');
             book.addEventListener('dragstart', (e) => {
                 const title = book.getAttribute('data-title') || book.querySelector('h3').textContent;
+                
+                // 检查是否已借出
+                if (BorrowManager.isBorrowed(title)) {
+                    e.preventDefault();
+                    alert(`《${title}》已被借出，无法加入购物车。`);
+                    return;
+                }
+                
                 e.dataTransfer.setData('text/plain', title);
                 book.style.opacity = '0.5';
             });
@@ -294,14 +302,34 @@ document.addEventListener('DOMContentLoaded', () => {
             checkoutBtn.style.marginTop = '10px';
             checkoutBtn.textContent = '立即借阅';
             checkoutBtn.onclick = () => {
+                const username = localStorage.getItem('library_user');
+                if (!username) {
+                    alert('请先登录后再进行借阅！');
+                    window.location.href = 'login.html';
+                    return;
+                }
+
                 const savedCart = JSON.parse(localStorage.getItem('library_cart') || '[]');
                 if (savedCart.length === 0) {
                     alert('购物车是空的！');
                     return;
                 }
-                alert(`成功借阅 ${savedCart.length} 本书！`);
-                localStorage.removeItem('library_cart');
-                loadCart();
+
+                let successCount = 0;
+                savedCart.forEach(title => {
+                    if (BorrowManager.borrow(title)) {
+                        successCount++;
+                    }
+                });
+
+                if (successCount > 0) {
+                    alert(`成功借阅 ${successCount} 本书！已同步至您的借阅中心。`);
+                    localStorage.removeItem('library_cart');
+                    loadCart();
+                    updateGlobalBookStatus(); // 更新全局状态显示
+                } else {
+                    alert('所选书籍均已被借阅，请检查购物车。');
+                }
             };
             cartZone.appendChild(checkoutBtn);
         }
@@ -477,6 +505,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (BorrowManager.borrow(title)) {
                 alert('借阅成功！书籍已加入您的借阅列表。');
                 updateButtonState();
+                updateGlobalBookStatus(); // 确保全局状态同步
             }
         });
     };
