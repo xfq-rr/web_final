@@ -588,7 +588,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (confirm(`确定要归还选中的 ${selected.length} 本图书吗？`)) {
                     selected.forEach(title => BorrowManager.returnBook(title));
                     renderBorrowedList();
-                    alert('批量归还成功！');
+                    alert('归还成功！');
                 }
             });
         }
