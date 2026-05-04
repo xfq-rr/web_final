@@ -136,12 +136,14 @@
                 <p>技术支持：前端开发大作业团队</p>
             </div>
             <div class="share-links">
-                <span>分享到：</span>
-                <a href="www.wechat.com">微信</a>
-                <a href="www.weibo.com">微博</a>
-                <a href="www.qq.com">QQ</a>
-            </div>
-        </div>
+    <span>分享到：</span>
+    <!-- 微信：复制链接提示（微信限制直接跳转分享页） -->
+    <a href="javascript:alert('已复制链接，可粘贴到微信分享！')">微信</a>
+    <!-- 微博：直接跳转到分享窗口 -->
+    <a href="https://service.weibo.com/share/share.php?url=http://127.0.0.1:3000/final_work/html/index.html&title=龚达图书馆" target="_blank">微博</a>
+    <!-- QQ：直接跳转到分享窗口 -->
+    <a href="https://connect.qq.com/widget/shareqq/index.html?url=http://127.0.0.1:3000/final_work/html/index.html&title=龚达图书馆" target="_blank">QQ</a>
+</div>
     </footer>
     <button id="backToTop" class="back-to-top" onclick="window.scrollTo(0,0)">↑</button>
     <script src="../js/script.js"></script>
