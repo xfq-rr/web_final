@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的借阅 - 龚达图书馆</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">龚达图书馆</div>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="搜索书名/作者...">
+                <button id="searchBtn">搜索</button>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">首页</a></li>
+                <li><a href="categories.html">图书分类</a></li>
+                <li><a href="contact.html">联系我们</a></li>
+                <li><a href="login.html" id="loginLink">登录</a></li>
+                <li id="userDisplay" style="display:none; color: var(--accent-color); font-weight: bold;"></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container profile-container">
+        <div class="profile-header">
+            <h1 id="welcomeUser">我的借阅</h1>
+            <p>以下是您在馆中借阅的所有图书</p>
+        </div>
+
+        <section class="borrowed-books-section glass-effect">
+            <div class="profile-actions">
+                <div class="select-all-wrapper">
+                    <input type="checkbox" id="selectAll">
+                    <label for="selectAll">全选</label>
+                </div>
+                <div class="batch-actions">
+                    <button id="batchReturnBtn" class="btn-small" style="background: var(--primary-color);">归还选中图书</button>
+                    <button id="returnAllBtn" class="btn-small">归还全部图书</button>
+                </div>
+            </div>
+
+            <div id="borrowedListContainer">
+                <!-- 借阅列表将由 JS 动态生成 -->
+                <div class="empty-state">
+                    <p>您目前还没有借阅任何图书</p>
+                    <a href="categories.html" class="btn-small">去借阅</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content container">
+            <div class="footer-info">
+                <p>&copy; 2026 龚达图书馆. All rights reserved.</p>
+                <p>技术支持：前端开发大作业团队</p>
+            </div>
+            <div class="share-links">
+                <span>分享到：</span>
+                <a href="#">微信</a>
+                <a href="#">微博</a>
+                <a href="#">QQ</a>
+            </div>
+        </div>
+    </footer>
+
+    <button id="backToTop" class="back-to-top" onclick="window.scrollTo(0,0)">↑</button>
+    <script src="js/script.js"></script>
+</body>
+</html>

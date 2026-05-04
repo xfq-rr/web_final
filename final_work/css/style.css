@@ -1196,22 +1196,121 @@ footer {
     .hero p {
         font-size: 16px;
     }
+}
 
-    .book-detail {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-        padding: 30px;
-    }
+.categories,
+.featured-books,
+.book-list-container {
+    padding: 50px 20px;
+}
 
-    .book-cover img {
-        width: 200px;
-        height: 280px;
-    }
+/* 个人中心页面样式 */
+.profile-container {
+    padding: 60px 0;
+    min-height: 60vh;
+}
 
-    .categories,
-    .featured-books,
-    .book-list-container {
-        padding: 50px 20px;
-    }
+.profile-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.profile-header h1 {
+    font-size: 36px;
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+
+.borrowed-books-section {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 30px;
+    box-shadow: var(--shadow);
+    margin-bottom: 40px;
+}
+
+.profile-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.borrowed-list {
+    list-style: none;
+}
+
+.borrowed-item {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid var(--border-color);
+    transition: var(--transition);
+}
+
+.borrowed-item:last-child {
+    border-bottom: none;
+}
+
+.borrowed-item:hover {
+    background: #fafafa;
+}
+
+.borrowed-item input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    margin-right: 20px;
+    cursor: pointer;
+}
+
+.borrowed-item img {
+    width: 60px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-right: 20px;
+    box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
+}
+
+.borrowed-info {
+    flex: 1;
+}
+
+.borrowed-info h3 {
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.borrowed-info p {
+    color: var(--text-light);
+    font-size: 14px;
+    margin: 0;
+}
+
+.return-btn-small {
+    padding: 6px 12px;
+    background: var(--secondary-color);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: var(--transition);
+}
+
+.return-btn-small:hover {
+    background: var(--accent-color);
+}
+
+.empty-state {
+    text-align: center;
+    padding: 80px 0;
+    color: var(--text-light);
+}
+
+.empty-state p {
+    font-size: 18px;
+    margin-bottom: 20px;
 }

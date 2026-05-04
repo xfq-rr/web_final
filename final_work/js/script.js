@@ -53,19 +53,100 @@ document.addEventListener('DOMContentLoaded', () => {
         const username = localStorage.getItem('library_user');
         const userDisplay = document.getElementById('userDisplay');
         const loginLink = document.getElementById('loginLink');
+        const navLinks = document.querySelector('.nav-links');
+        
         if (username && userDisplay && loginLink) {
             userDisplay.textContent = `欢迎, ${username}`;
             userDisplay.style.display = 'block';
+            
+            // 添加“我的”链接
+            if (navLinks && !document.querySelector('a[href="profile.html"]')) {
+                const profileLi = document.createElement('li');
+                profileLi.innerHTML = '<a href="profile.html">我的借阅</a>';
+                navLinks.insertBefore(profileLi, loginLink.parentElement);
+            }
+
             loginLink.textContent = '退出';
             loginLink.href = '#';
             loginLink.addEventListener('click', (e) => {
                 e.preventDefault();
                 localStorage.removeItem('library_user');
-                location.reload();
+                location.href = 'index.html';
             });
         }
     };
     checkUserStatus();
+
+    // --- 全局借阅数据管理 ---
+    const BorrowManager = {
+        getBorrowed: () => JSON.parse(localStorage.getItem('borrowed_books') || '[]'),
+        isBorrowed: (title) => BorrowManager.getBorrowed().includes(title),
+        borrow: (title) => {
+            const borrowed = BorrowManager.getBorrowed();
+            if (!borrowed.includes(title)) {
+                borrowed.push(title);
+                localStorage.setItem('borrowed_books', JSON.stringify(borrowed));
+                return true;
+            }
+            return false;
+        },
+        returnBook: (title) => {
+            let borrowed = BorrowManager.getBorrowed();
+            borrowed = borrowed.filter(t => t !== title);
+            localStorage.setItem('borrowed_books', JSON.stringify(borrowed));
+        },
+        returnAll: () => {
+            localStorage.setItem('borrowed_books', JSON.stringify([]));
+        }
+    };
+
+    const bookData = {
+        "物种起源": { author: "达尔文", publisher: "商务印书馆", isbn: "978-7100010122", desc: "进化论的奠基之作，用大量证据提出了自然选择学说，彻底改变了人类对生命起源与演化的认知。" },
+        "时间简史": { author: "霍金", publisher: "湖南科学技术出版社", isbn: "978-7535732309", desc: "用通俗语言讲述宇宙起源、黑洞、时间与空间的奥秘，让普通人也能理解复杂的物理学概念。" },
+        "自然哲学的数学原理": { author: "牛顿", publisher: "北京大学出版社", isbn: "978-7301085521", desc: "经典力学的里程碑，系统阐述了万有引力定律与三大运动定律，奠定了近代物理学的基础。" },
+        "关于两大世界体系的对话": { author: "伽利略", publisher: "上海人民出版社", isbn: "978-7208123456", desc: "以对话形式论证日心说，挑战了当时的权威观点，推动了科学思想的解放与天文学的革命。" },
+        "史记": { author: "司马迁", publisher: "中华书局", isbn: "978-7101003048", desc: "中国第一部纪传体通史，记载了从黄帝到汉武帝时期的历史，被誉为 “史家之绝唱，无韵之离骚”。" },
+        "资治通鉴": { author: "司马光", publisher: "中华书局", isbn: "978-7101000122", desc: "编年体通史巨著，以时间为线索梳理历代兴衰，旨在为统治者提供治国理政的历史借鉴。" },
+        "明朝那些事儿": { author: "当年明月", publisher: "浙江人民出版社", isbn: "978-7213040603", desc: "以幽默通俗的语言讲述明朝三百年历史，让枯燥的史料变得生动有趣，是现象级的历史读物。" },
+        "罗马帝国衰亡史": { author: "吉本", publisher: "商务印书馆", isbn: "978-7100023456", desc: "西方史学经典，全面分析了罗马帝国从鼎盛到衰落的过程与原因，影响了后世对古代帝国的研究。" },
+        "艺术的故事": { author: "贡布里希", publisher: "广西美术出版社", isbn: "978-7806745532", desc: "艺术史入门经典，以清晰的脉络讲述艺术从原始到现代的发展，帮助读者理解艺术背后的思想与变革。" },
+        "机械复制时代的艺术作品": { author: "本雅明", publisher: "浙江摄影出版社", isbn: "978-7805364567", desc: "探讨摄影、电影等复制技术对艺术的影响，提出了 “光晕” 等重要概念，深刻影响了现代艺术理论。" },
+        "名画家传": { author: "瓦萨里", publisher: "湖北美术出版社", isbn: "978-7539412345", desc: "西方第一部艺术史著作，记录了文艺复兴时期艺术家的生平与作品，是研究早期艺术的重要文献。" },
+        "艺术与错觉": { author: "贡布里希", publisher: "广西美术出版社", isbn: "978-7806745533", desc: "从心理学角度分析艺术创作与感知的关系，探讨艺术家如何利用视觉规律创造出逼真的效果。" },
+        "百年孤独": { author: "马尔克斯", publisher: "南海出版公司", isbn: "978-7544253994", desc: "魔幻现实主义文学的代表作，讲述布恩迪亚家族七代人的命运，展现了拉丁美洲的百年沧桑与孤独。" },
+        "活着": { author: "余华", publisher: "作家出版社", isbn: "978-7506365437", desc: "以平实的笔触讲述主人公福贵的一生，在苦难中展现生命的韧性与力量，充满对人性与命运的深刻思考。" },
+        "红楼梦": { author: "曹雪芹", publisher: "人民文学出版社", isbn: "978-7020002023", desc: "中国古典小说的巅峰之作，以贾府兴衰为背景，描绘了封建社会的人情冷暖与家族命运，细节与思想深度兼具。" },
+        "围城": { author: "钱钟书", publisher: "人民文学出版社", isbn: "978-7020019328", desc: "以方鸿渐的人生经历为主线，讽刺了知识分子的虚伪与困境，“围城” 的隐喻成为对婚姻与人生困境的经典概括。" }
+    };
+
+    // --- 更新全局图书借阅状态展示 ---
+    const updateGlobalBookStatus = () => {
+        const bookCards = document.querySelectorAll('.book-card, .book-item');
+        bookCards.forEach(card => {
+            const title = card.getAttribute('data-title') || card.querySelector('h3').textContent;
+            if (BorrowManager.isBorrowed(title)) {
+                const statusLabel = card.querySelector('.status');
+                if (statusLabel) {
+                    statusLabel.textContent = '已借出';
+                    statusLabel.className = 'status borrowed';
+                }
+                // 首页推荐图书没有 .status 标签，可以添加样式或提示
+                if (card.classList.contains('book-item')) {
+                    card.style.opacity = '0.8';
+                }
+            } else {
+                const statusLabel = card.querySelector('.status');
+                if (statusLabel) {
+                    statusLabel.textContent = '可借阅';
+                    statusLabel.className = 'status available';
+                }
+                if (card.classList.contains('book-item')) {
+                    card.style.opacity = '1';
+                }
+            }
+        });
+    };
+    updateGlobalBookStatus();
 
     // --- 4. 图片切换 (Banner Slider) ---
     const initBanner = () => {
@@ -321,25 +402,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- 9. 详情页动态数据填充 ---
     const initDetailPage = () => {
-        const bookData = {
-            "物种起源": { author: "达尔文", publisher: "商务印书馆", isbn: "978-7100010122", desc: "进化论的奠基之作，用大量证据提出了自然选择学说，彻底改变了人类对生命起源与演化的认知。" },
-            "时间简史": { author: "霍金", publisher: "湖南科学技术出版社", isbn: "978-7535732309", desc: "用通俗语言讲述宇宙起源、黑洞、时间与空间的奥秘，让普通人也能理解复杂的物理学概念。" },
-            "自然哲学的数学原理": { author: "牛顿", publisher: "北京大学出版社", isbn: "978-7301085521", desc: "经典力学的里程碑，系统阐述了万有引力定律与三大运动定律，奠定了近代物理学的基础。" },
-            "关于两大世界体系的对话": { author: "伽利略", publisher: "上海人民出版社", isbn: "978-7208123456", desc: "以对话形式论证日心说，挑战了当时的权威观点，推动了科学思想的解放与天文学的革命。" },
-            "史记": { author: "司马迁", publisher: "中华书局", isbn: "978-7101003048", desc: "中国第一部纪传体通史，记载了从黄帝到汉武帝时期的历史，被誉为 “史家之绝唱，无韵之离骚”。" },
-            "资治通鉴": { author: "司马光", publisher: "中华书局", isbn: "978-7101000122", desc: "编年体通史巨著，以时间为线索梳理历代兴衰，旨在为统治者提供治国理政的历史借鉴。" },
-            "明朝那些事儿": { author: "当年明月", publisher: "浙江人民出版社", isbn: "978-7213040603", desc: "以幽默通俗的语言讲述明朝三百年历史，让枯燥的史料变得生动有趣，是现象级的历史读物。" },
-            "罗马帝国衰亡史": { author: "吉本", publisher: "商务印书馆", isbn: "978-7100023456", desc: "西方史学经典，全面分析了罗马帝国从鼎盛到衰落的过程与原因，影响了后世对古代帝国的研究。" },
-            "艺术的故事": { author: "贡布里希", publisher: "广西美术出版社", isbn: "978-7806745532", desc: "艺术史入门经典，以清晰的脉络讲述艺术从原始到现代的发展，帮助读者理解艺术背后的思想与变革。" },
-            "机械复制时代的艺术作品": { author: "本雅明", publisher: "浙江摄影出版社", isbn: "978-7805364567", desc: "探讨摄影、电影等复制技术对艺术的影响，提出了 “光晕” 等重要概念，深刻影响了现代艺术理论。" },
-            "名画家传": { author: "瓦萨里", publisher: "湖北美术出版社", isbn: "978-7539412345", desc: "西方第一部艺术史著作，记录了文艺复兴时期艺术家的生平与作品，是研究早期艺术的重要文献。" },
-            "艺术与错觉": { author: "贡布里希", publisher: "广西美术出版社", isbn: "978-7806745533", desc: "从心理学角度分析艺术创作与感知的关系，探讨艺术家如何利用视觉规律创造出逼真的效果。" },
-            "百年孤独": { author: "马尔克斯", publisher: "南海出版公司", isbn: "978-7544253994", desc: "魔幻现实主义文学的代表作，讲述布恩迪亚家族七代人的命运，展现了拉丁美洲的百年沧桑与孤独。" },
-            "活着": { author: "余华", publisher: "作家出版社", isbn: "978-7506365437", desc: "以平实的笔触讲述主人公福贵的一生，在苦难中展现生命的韧性与力量，充满对人性与命运的深刻思考。" },
-            "红楼梦": { author: "曹雪芹", publisher: "人民文学出版社", isbn: "978-7020002023", desc: "中国古典小说的巅峰之作，以贾府兴衰为背景，描绘了封建社会的人情冷暖与家族命运，细节与思想深度兼具。" },
-            "围城": { author: "钱钟书", publisher: "人民文学出版社", isbn: "978-7020019328", desc: "以方鸿渐的人生经历为主线，讽刺了知识分子的虚伪与困境，“围城” 的隐喻成为对婚姻与人生困境的经典概括。" }
-        };
-
         const params = new URLSearchParams(window.location.search);
         const title = params.get('title');
         if (!title || !bookData[title]) return;
@@ -371,37 +433,154 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     initDetailPage();
 
-    // --- 10. 详情页借阅逻辑 (智能判断已借出状态) ---
+    // --- 10. 详情页借阅逻辑 (支持持久化状态) ---
     const initBorrowLogic = () => {
         const borrowButton = document.querySelector('.book-detail .btn');
         if (!borrowButton) return;
 
-        // 从 URL 获取状态参数
-        const urlParams = new URLSearchParams(window.location.search);
-        const isBorrowed = urlParams.get('status') === 'borrowed';
-
-        if (isBorrowed) {
-            borrowButton.textContent = '该书已借出';
-            borrowButton.disabled = true;
-            borrowButton.style.opacity = '0.7';
-            
-            // 添加一个状态说明
-            const infoArea = document.querySelector('.book-info');
-            const statusNotice = document.createElement('p');
-            statusNotice.style.color = '#c62828';
-            statusNotice.style.fontWeight = 'bold';
-            statusNotice.innerHTML = '⚠️ 此图书目前不在馆内，预计归还时间：2026-05-15';
-            infoArea.insertBefore(statusNotice, borrowButton);
-        } else {
-            borrowButton.addEventListener('click', () => {
-                alert('借阅成功！书籍已加入您的借阅列表。');
-                // 模拟状态改变
-                borrowButton.textContent = '已成功借阅';
+        const params = new URLSearchParams(window.location.search);
+        const title = params.get('title');
+        
+        const updateButtonState = () => {
+            if (BorrowManager.isBorrowed(title)) {
+                borrowButton.textContent = '该书已借出';
                 borrowButton.disabled = true;
-            });
-        }
+                borrowButton.style.opacity = '0.7';
+                
+                // 如果还没有提示，添加一个
+                if (!document.querySelector('.status-notice')) {
+                    const infoArea = document.querySelector('.book-info');
+                    const statusNotice = document.createElement('p');
+                    statusNotice.className = 'status-notice';
+                    statusNotice.style.color = '#c62828';
+                    statusNotice.style.fontWeight = 'bold';
+                    statusNotice.innerHTML = '⚠️ 此图书目前不在馆内，已被您或其他读者借阅。';
+                    infoArea.insertBefore(statusNotice, borrowButton);
+                }
+            } else {
+                borrowButton.textContent = '借阅';
+                borrowButton.disabled = false;
+                borrowButton.style.opacity = '1';
+                const notice = document.querySelector('.status-notice');
+                if (notice) notice.remove();
+            }
+        };
+
+        updateButtonState();
+
+        borrowButton.addEventListener('click', () => {
+            if (!localStorage.getItem('library_user')) {
+                alert('请先登录后再进行借阅！');
+                window.location.href = 'login.html';
+                return;
+            }
+            if (BorrowManager.borrow(title)) {
+                alert('借阅成功！书籍已加入您的借阅列表。');
+                updateButtonState();
+            }
+        });
     };
     initBorrowLogic();
+
+    // --- 13. 个人中心逻辑 (profile.html) ---
+    const initProfilePage = () => {
+        const container = document.getElementById('borrowedListContainer');
+        const welcomeUser = document.getElementById('welcomeUser');
+        if (!container) return;
+
+        const username = localStorage.getItem('library_user');
+        if (!username) {
+            window.location.href = 'login.html';
+            return;
+        }
+        if (welcomeUser) welcomeUser.textContent = `${username} 的借阅中心`;
+
+        const renderBorrowedList = () => {
+            const borrowedTitles = BorrowManager.getBorrowed();
+            if (borrowedTitles.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <p>您目前还没有借阅任何图书</p>
+                        <a href="categories.html" class="btn-small">去借阅</a>
+                    </div>`;
+                return;
+            }
+
+            let html = '<ul class="borrowed-list">';
+            borrowedTitles.forEach(title => {
+                const book = bookData[title] || { author: '未知作者' };
+                let fileName = title;
+                if (title === "关于两大世界体系的对话") fileName = "关于世界两大体系的对话";
+                
+                html += `
+                    <li class="borrowed-item">
+                        <input type="checkbox" class="book-checkbox" data-title="${title}">
+                        <img src="images/${fileName}.png" alt="${title}">
+                        <div class="borrowed-info">
+                            <h3>${title}</h3>
+                            <p>作者：${book.author}</p>
+                            <p>借阅时间：2026-05-04</p>
+                        </div>
+                        <button class="return-btn-small" onclick="handleSingleReturn('${title}')">归还</button>
+                    </li>`;
+            });
+            html += '</ul>';
+            container.innerHTML = html;
+        };
+
+        // 定义全局函数以便在 HTML 中调用
+        window.handleSingleReturn = (title) => {
+            if (confirm(`确定要归还《${title}》吗？`)) {
+                BorrowManager.returnBook(title);
+                renderBorrowedList();
+                alert('归还成功！');
+            }
+        };
+
+        // 全选逻辑
+        const selectAll = document.getElementById('selectAll');
+        if (selectAll) {
+            selectAll.addEventListener('change', () => {
+                const checkboxes = document.querySelectorAll('.book-checkbox');
+                checkboxes.forEach(cb => cb.checked = selectAll.checked);
+            });
+        }
+
+        // 批量归还
+        const batchBtn = document.getElementById('batchReturnBtn');
+        if (batchBtn) {
+            batchBtn.addEventListener('click', () => {
+                const selected = Array.from(document.querySelectorAll('.book-checkbox:checked'))
+                                    .map(cb => cb.getAttribute('data-title'));
+                if (selected.length === 0) {
+                    alert('请先选择要归还的图书！');
+                    return;
+                }
+                if (confirm(`确定要归还选中的 ${selected.length} 本图书吗？`)) {
+                    selected.forEach(title => BorrowManager.returnBook(title));
+                    renderBorrowedList();
+                    alert('批量归还成功！');
+                }
+            });
+        }
+
+        // 全部归还
+        const returnAllBtn = document.getElementById('returnAllBtn');
+        if (returnAllBtn) {
+            returnAllBtn.addEventListener('click', () => {
+                const borrowed = BorrowManager.getBorrowed();
+                if (borrowed.length === 0) return;
+                if (confirm('确定要归还所有借阅的图书吗？')) {
+                    BorrowManager.returnAll();
+                    renderBorrowedList();
+                    alert('所有图书已成功归还！');
+                }
+            });
+        }
+
+        renderBorrowedList();
+    };
+    initProfilePage();
 
     // --- 12. 分页逻辑 ---
     const initPagination = () => {
