@@ -453,7 +453,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // 处理特殊文件名不匹配的情况
             let fileName = title;
             if (title === "关于两大世界体系的对话") fileName = "关于世界两大体系的对话";
-            elements.cover.src = `images/${fileName}.png`;
+            elements.cover.src = `../images/${fileName}.png`;
             elements.cover.alt = title;
         }
         
@@ -544,7 +544,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 html += `
                     <li class="borrowed-item">
                         <input type="checkbox" class="book-checkbox" data-title="${title}">
-                        <img src="images/${fileName}.png" alt="${title}">
+                        <img src="../images/${fileName}.png" alt="${title}">
                         <div class="borrowed-info">
                             <h3>${title}</h3>
                             <p>作者：${book.author}</p>
