@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>龚达图书馆</title>
     <link rel="stylesheet" href="../css/style.css">
 </head>
+
 <body>
     <header>
         <nav>
@@ -19,26 +21,41 @@
                 <li><a href="categories.html">图书分类</a></li>
                 <li><a href="contact.html">联系我们</a></li>
                 <li><a href="login.html" id="loginLink">登录</a></li>
-                <li id="userDisplay" style="display:none; color: var(--accent-color); font-weight: bold;"></li>
+
+                <!-- 只保留这一个头像 -->
+                <li>
+                    <div class="avatar" id="avatarBtn" title="点击进入个人中心">
+                        <img src="../images/default-avatar.jpg" alt="用户头像">
+                    </div>
+                </li>
+
+                <!-- 登录后显示：用户名 + 退出 -->
+                <li id="userInfo" style="display: none; align-items: center; gap: 10px;">
+                    <span id="currentUsername" style="color: var(--accent-color); font-weight: bold;"></span>
+                    <a href="javascript:;" id="logoutBtn" style="color: #ccc; text-decoration: none;">退出</a>
+                </li>
             </ul>
         </nav>
     </header>
     <main>
         <section class="banner-container">
             <div class="banner-slider">
-                <div class="banner-slide active" style="background-image: url('https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=1600&q=80');">
+                <div class="banner-slide active"
+                    style="background-image: url('https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=1600&q=80');">
                     <div class="banner-content">
                         <h2>【活动预告】名家讲坛：对话余华</h2>
                         <p>本周六 14:00，与大师一同探讨文学之魂</p>
                     </div>
                 </div>
-                <div class="banner-slide" style="background-image: url('https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&w=1600&q=80');">
+                <div class="banner-slide"
+                    style="background-image: url('https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&w=1600&q=80');">
                     <div class="banner-content">
                         <h2>【新书推荐】4月艺术新书入库</h2>
                         <p>近百本精选艺术画册、理论书籍现已全面上架</p>
                     </div>
                 </div>
-                <div class="banner-slide" style="background-image: url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=1600&q=80');">
+                <div class="banner-slide"
+                    style="background-image: url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=1600&q=80');">
                     <div class="banner-content">
                         <h2>【读者沙龙】英语绘本朗读会</h2>
                         <p>每周日下午 15:30，开启孩子们的奇幻森林之旅</p>
@@ -63,7 +80,8 @@
             <div class="content-area">
                 <section class="featured-books">
                     <h2>推荐图书</h2>
-                    <p style="text-align:center; color: var(--text-light); margin-top: -30px; margin-bottom: 30px;">(可拖动图书到右侧购物车)</p>
+                    <p style="text-align:center; color: var(--text-light); margin-top: -30px; margin-bottom: 30px;">
+                        (可拖动图书到右侧购物车)</p>
                     <div class="book-list">
                         <div class="book-item" draggable="true" data-title="百年孤独">
                             <img src="../images/百年孤独.png" alt="图书封面">
@@ -136,16 +154,21 @@
                 <p>技术支持：前端开发大作业团队</p>
             </div>
             <div class="share-links">
-    <span>分享到：</span>
-    <!-- 微信：复制链接提示（微信限制直接跳转分享页） -->
-    <a href="javascript:alert('已复制链接，可粘贴到微信分享！')">微信</a>
-    <!-- 微博：直接跳转到分享窗口 -->
-    <a href="https://service.weibo.com/share/share.php?url=http://127.0.0.1:3000/final_work/html/index.html&title=龚达图书馆" target="_blank">微博</a>
-    <!-- QQ：直接跳转到分享窗口 -->
-    <a href="https://connect.qq.com/widget/shareqq/index.html?url=http://127.0.0.1:3000/final_work/html/index.html&title=龚达图书馆" target="_blank">QQ</a>
-</div>
+                <span>分享到：</span>
+                <!-- 微信：复制链接提示（微信限制直接跳转分享页） -->
+                <a href="javascript:alert('已复制链接，可粘贴到微信分享！')">微信</a>
+                <!-- 微博：直接跳转到分享窗口 -->
+                <a href="https://service.weibo.com/share/share.php?url=http://127.0.0.1:3000/final_work/html/index.html&title=龚达图书馆"
+                    target="_blank">微博</a>
+                <!-- QQ：直接跳转到分享窗口 -->
+                <a href="https://connect.qq.com/widget/shareqq/index.html?url=http://127.0.0.1:3000/final_work/html/index.html&title=龚达图书馆"
+                    target="_blank">QQ</a>
+            </div>
     </footer>
     <button id="backToTop" class="back-to-top" onclick="window.scrollTo(0,0)">↑</button>
     <script src="../js/script.js"></script>
+
 </body>
+
+
 </html>

@@ -48,37 +48,93 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     revealElements();
 
-    // --- 3. 用户状态显示 (localStorage) ---
-    const checkUserStatus = () => {
-        const username = localStorage.getItem('library_user');
-        const userDisplay = document.getElementById('userDisplay');
-        const loginLink = document.getElementById('loginLink');
-        const navLinks = document.querySelector('.nav-links');
-        
-        if (username && userDisplay && loginLink) {
-            userDisplay.textContent = `欢迎, ${username}`;
-            userDisplay.style.display = 'block';
-            
-            // 添加“我的”链接
-            if (navLinks && !document.querySelector('a[href="profile.html"]')) {
-                const profileLi = document.createElement('li');
-                profileLi.innerHTML = '<a href="profile.html">我的借阅</a>';
-                navLinks.insertBefore(profileLi, loginLink.parentElement);
-            }
+    // --- 2026.5.20吴改 ---
+   // --- 3. 用户状态显示 (localStorage) ---
+// --- 3. 用户状态显示 (localStorage) ---
+const checkUserStatus = () => {
+    const username = localStorage.getItem('library_user');
+    const loginLink = document.getElementById('loginLink');
+    const navLinks = document.querySelector('.nav-links');
+    const userInfo = document.getElementById('userInfo'); // 你现在用的是这个元素
+    const currentUsername = document.getElementById('currentUsername');
 
-            loginLink.textContent = '退出';
-            loginLink.href = '#';
-            loginLink.addEventListener('click', (e) => {
-                e.preventDefault();
-                localStorage.removeItem('library_user');
-                location.href = 'index.html';
-            });
+    // ✅ 删除了不存在的 userDisplay 判断
+    if (username && loginLink && navLinks && userInfo && currentUsername) {
+        // 已登录：隐藏登录按钮，显示用户名和退出
+        loginLink.style.display = 'none';
+        userInfo.style.display = 'flex';
+        currentUsername.textContent = username;
+
+        // 自动添加"我的借阅"链接
+        if (!document.querySelector('a[href="profile.html"]')) {
+            const pLi = document.createElement('li');
+            pLi.innerHTML = '<a href="profile.html">我的借阅</a>';
+            navLinks.insertBefore(pLi, loginLink.parentElement);
         }
-    };
-    checkUserStatus();
 
+        // 绑定退出登录按钮
+const logoutBtn = document.getElementById('logoutBtn');
+if (logoutBtn) {
+    logoutBtn.onclick = (e) => {
+        e.preventDefault();
+        localStorage.removeItem('library_user'); // 清除用户名
+        localStorage.removeItem('isLogin'); // 清除登录标记
+        location.href = 'index.html';
+    };
+}
+    } else {
+        // 未登录：显示登录按钮，隐藏用户信息
+        if (loginLink) loginLink.style.display = 'list-item';
+        if (userInfo) userInfo.style.display = 'none';
+        const profileLink = document.querySelector('a[href="profile.html"]');
+        if (profileLink) profileLink.parentElement.remove();
+    }
+};
+
+// 单独提取点击处理函数，方便移除
+function handleAvatarClick() {
+    const username = localStorage.getItem('library_user');
+    // 更严谨的判断：用户名存在且非空
+    if (username && username.trim() !== '') {
+        // 已登录直接跳个人信息
+        window.location.href = 'personal.html';
+    } else {
+        // 未登录跳登录页，带个标记告诉它要跳个人信息
+        alert('您还未登录，请先登录');
+        window.location.href = 'login.html?from=personal';
+    }
+}
+
+// ✅ 头像点击逻辑（移到DOM加载完成后执行）
+const initAvatarClick = () => {
+    const avatarBtn = document.getElementById('avatarBtn');
+    if (!avatarBtn) {
+        console.warn('⚠️ 未找到id为「avatarBtn」的头像按钮，请检查页面元素ID！');
+        return;
+    }
+
+    // 更可靠的方式移除旧事件（避免重复绑定）
+    const newAvatarBtn = avatarBtn.cloneNode(true);
+    avatarBtn.parentNode.replaceChild(newAvatarBtn, avatarBtn);
+
+    // 绑定新的点击事件
+    newAvatarBtn.addEventListener('click', handleAvatarClick);
+
+    // 自定义鼠标效果
+    const cursor = document.querySelector('.custom-cursor');
+    if (cursor) {
+        newAvatarBtn.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+        newAvatarBtn.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+    }
+};
+
+// 页面加载完成后执行所有初始化
+checkUserStatus();
+initAvatarClick();
+/**/
+//2026.5.20吴改
     // --- 全局借阅数据管理 ---
-    const BorrowManager = {
+    /* const BorrowManager = {
         getBorrowed: () => JSON.parse(localStorage.getItem('borrowed_books') || '[]'),
         isBorrowed: (title) => BorrowManager.getBorrowed().includes(title),
         borrow: (title) => {
@@ -98,7 +154,69 @@ document.addEventListener('DOMContentLoaded', () => {
         returnAll: () => {
             localStorage.setItem('borrowed_books', JSON.stringify([]));
         }
-    };
+    }; */
+// --- 全局借阅数据管理（新增历史记录） ---
+const BorrowManager = {
+    // 获取当前借阅
+    getBorrowed: () => JSON.parse(localStorage.getItem('borrowed_books') || '[]'),
+    // 获取所有借阅历史（含已归还）
+    getHistory: () => JSON.parse(localStorage.getItem('borrow_history') || '[]'),
+    // 判断是否已借出
+    isBorrowed: (title) => BorrowManager.getBorrowed().includes(title),
+    
+    // 借阅图书：同时添加到当前借阅和历史记录
+    borrow: (title) => {
+        const borrowed = BorrowManager.getBorrowed();
+        if (!borrowed.includes(title)) {
+            borrowed.push(title);
+            localStorage.setItem('borrowed_books', JSON.stringify(borrowed));
+            
+            // 新增：添加到借阅历史，记录借阅时间
+            const history = BorrowManager.getHistory();
+            history.push({
+                title: title,
+                borrowTime: new Date().toISOString().slice(0, 10), // 格式：2026-05-20
+                returnTime: null // null表示未归还
+            });
+            localStorage.setItem('borrow_history', JSON.stringify(history));
+            return true;
+        }
+        return false;
+    },
+    
+    // 归还图书：从当前借阅移除，更新历史记录的归还时间
+    returnBook: (title) => {
+        // 更新当前借阅
+        let borrowed = BorrowManager.getBorrowed();
+        borrowed = borrowed.filter(t => t !== title);
+        localStorage.setItem('borrowed_books', JSON.stringify(borrowed));
+        
+        // 更新历史记录：设置归还时间
+        const history = BorrowManager.getHistory();
+        const record = history.find(item => item.title === title && item.returnTime === null);
+        if (record) {
+            record.returnTime = new Date().toISOString().slice(0, 10);
+            localStorage.setItem('borrow_history', JSON.stringify(history));
+        }
+    },
+    
+    // 归还所有图书
+    returnAll: () => {
+        const borrowed = BorrowManager.getBorrowed();
+        const history = BorrowManager.getHistory();
+        
+        // 批量更新所有未归还记录的归还时间
+        borrowed.forEach(title => {
+            const record = history.find(item => item.title === title && item.returnTime === null);
+            if (record) {
+                record.returnTime = new Date().toISOString().slice(0, 10);
+            }
+        });
+        
+        localStorage.setItem('borrowed_books', JSON.stringify([]));
+        localStorage.setItem('borrow_history', JSON.stringify(history));
+    }
+};
 
     const bookData = {
         "物种起源": { author: "达尔文", publisher: "商务印书馆", isbn: "978-7100010122", desc: "进化论的奠基之作，用大量证据提出了自然选择学说，彻底改变了人类对生命起源与演化的认知。" },
@@ -422,6 +540,7 @@ tabBtns.forEach(btn => {
 });
 
 // 8.2. 登录表单提交（完全复用validUsers数组，同时支持注册用户）
+// 8.2. 登录表单提交（完全复用validUsers数组，同时支持注册用户）
 const loginForm = document.getElementById('login-form');
 if (loginForm) {
     loginForm.addEventListener('submit', (e) => {
@@ -445,8 +564,9 @@ if (loginForm) {
         if (!user) { alert('用户名不存在！'); return; }
         if (user.password !== password) { alert('密码错误！'); return; }
 
-        // 登录成功（保留你原有逻辑）
-        localStorage.setItem('library_user', username);
+        // 登录成功：同步设置两个登录状态键（统一状态）
+        localStorage.setItem('library_user', username); // 用户名
+        localStorage.setItem('isLogin', 'true'); // 登录标记（兼容personal.html）
         alert('登录成功！');
         window.location.href = 'index.html';
     });

@@ -9,19 +9,31 @@
 <body>
     <header>
         <nav>
-            <div class="logo">龚达图书馆</div>
-            <div class="search-bar">
-                <input type="text" id="searchInput" placeholder="搜索书名/作者...">
-                <button id="searchBtn">搜索</button>
-            </div>
-            <ul class="nav-links">
-                <li><a href="index.html">首页</a></li>
-                <li><a href="categories.html">图书分类</a></li>
-                <li><a href="contact.html">联系我们</a></li>
-                <li><a href="login.html" id="loginLink">登录</a></li>
-                <li id="userDisplay" style="display:none; color: var(--accent-color); font-weight: bold;"></li>
-            </ul>
-        </nav>
+        <div class="logo">龚达图书馆</div>
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="搜索书名/作者...">
+            <button id="searchBtn">搜索</button>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html">首页</a></li>
+            <li><a href="categories.html">图书分类</a></li>
+            <li><a href="contact.html">联系我们</a></li>
+            <li><a href="login.html" id="loginLink">登录</a></li>
+            
+            <!-- 头像（所有页面都要有） -->
+            <li>
+                <div class="avatar" id="avatarBtn" title="点击进入个人中心">
+                    <img src="../images/default-avatar.jpg" alt="用户头像">
+                </div>
+            </li>
+            
+            <!-- 用户信息（所有页面都要有） -->
+            <li id="userInfo" style="display: none; align-items: center; gap: 10px;">
+                <span id="currentUsername" style="color: var(--accent-color); font-weight: bold;"></span>
+                <a href="javascript:;" id="logoutBtn" style="color: #ccc; text-decoration: none;">退出</a>
+            </li>
+        </ul>
+    </nav>
     </header>
     <main>
         <section class="book-list-container">
