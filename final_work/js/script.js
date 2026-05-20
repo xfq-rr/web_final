@@ -391,27 +391,101 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     initFloatAd();
 
-    // --- 8. 表单验证 (登录 & 联系) ---
-    const loginForm = document.querySelector('.login-form');
-    if (loginForm) {
-        const validUsers = [
-            { username: 'admin', password: '123456' },
-            { username: 'user', password: '654321' }
-        ];
-        loginForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const username = loginForm.querySelector('#username').value.trim();
-            const password = loginForm.querySelector('#password').value;
-            if (!username) { alert('请输入用户名！'); return; }
-            const user = validUsers.find(u => u.username === username);
-            if (!user) { alert('用户名不存在！'); return; }
-            if (user.password !== password) { alert('密码错误！'); return; }
-            
-            localStorage.setItem('library_user', username);
-            alert('登录成功！');
-            window.location.href = 'index.html';
+  // --- 8. 表单验证（登录 & 注册 & 联系） ---
+// 默认账号列表（以后添加默认账号只需要在这里加，其他地方不用改）
+const validUsers = [
+    { username: 'admin', password: '123456' },
+    { username: 'user', password: '654321' }
+];
+
+// 8.1. 标签页切换逻辑
+const tabBtns = document.querySelectorAll('.tab-btn');
+const forms = document.querySelectorAll('.login-form');
+
+tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        // 移除所有激活状态
+        tabBtns.forEach(b => {
+            b.classList.remove('active');
+            b.style.color = '#666';
+            b.style.borderBottom = 'none';
         });
-    }
+        forms.forEach(f => f.style.display = 'none');
+
+        // 设置当前激活状态
+        btn.classList.add('active');
+        btn.style.color = '#333';
+        btn.style.borderBottom = '2px solid #8B7355';
+        const targetTab = btn.dataset.tab;
+        document.getElementById(`${targetTab}-form`).style.display = 'block';
+    });
+});
+
+// 8.2. 登录表单提交（完全复用validUsers数组，同时支持注册用户）
+const loginForm = document.getElementById('login-form');
+if (loginForm) {
+    loginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value;
+
+        // 基础验证
+        if (!username) { alert('请输入用户名！'); return; }
+
+        // 第一步：验证默认账号（validUsers数组）
+        let user = validUsers.find(u => u.username === username);
+        
+        // 第二步：如果不是默认账号，验证本地注册的用户
+        if (!user) {
+            const registeredUsers = JSON.parse(localStorage.getItem('libraryUsers') || '[]');
+            user = registeredUsers.find(u => u.username === username);
+        }
+
+        // 验证密码
+        if (!user) { alert('用户名不存在！'); return; }
+        if (user.password !== password) { alert('密码错误！'); return; }
+
+        // 登录成功（保留你原有逻辑）
+        localStorage.setItem('library_user', username);
+        alert('登录成功！');
+        window.location.href = 'index.html';
+    });
+}
+
+// 8.3. 注册表单提交
+const registerForm = document.getElementById('register-form');
+if (registerForm) {
+    registerForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const username = document.getElementById('reg-username').value.trim();
+        const password = document.getElementById('reg-password').value.trim();
+        const repassword = document.getElementById('reg-repassword').value.trim();
+
+        // 基础验证
+        if (!username) { alert('请输入用户名！'); return; }
+        if (password.length < 6) { alert('密码长度不能少于6位！'); return; }
+        if (password !== repassword) { alert('两次输入的密码不一致！'); return; }
+
+        // 检查用户名是否已被使用（默认账号+注册账号）
+        const isDefaultUser = validUsers.some(u => u.username === username);
+        const registeredUsers = JSON.parse(localStorage.getItem('libraryUsers') || '[]');
+        const isRegisteredUser = registeredUsers.some(u => u.username === username);
+
+        if (isDefaultUser || isRegisteredUser) {
+            alert('该用户名已被注册，请更换用户名！');
+            return;
+        }
+
+        // 保存注册用户
+        registeredUsers.push({ username, password });
+        localStorage.setItem('libraryUsers', JSON.stringify(registeredUsers));
+        alert('注册成功！请登录');
+
+        // 自动切换到登录页并清空表单
+        tabBtns[0].click();
+        registerForm.reset();
+    });
+}
 
     const contactForm = document.getElementById('contactForm');
     if (contactForm) {
