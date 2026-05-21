@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>图书分类</title>
     <link rel="stylesheet" href="../css/style.css">
 </head>
+
 <body>
     <header>
         <nav>
@@ -19,7 +21,19 @@
                 <li><a href="categories.html">图书分类</a></li>
                 <li><a href="contact.html">联系我们</a></li>
                 <li><a href="login.html" id="loginLink">登录</a></li>
-                <li id="userDisplay" style="display:none; color: var(--accent-color); font-weight: bold;"></li>
+
+                <!-- 头像（所有页面都要有） -->
+                <li>
+                    <div class="avatar" id="avatarBtn" title="点击进入个人中心">
+                        <img src="../images/default-avatar.jpg" alt="用户头像">
+                    </div>
+                </li>
+
+                <!-- 用户信息（所有页面都要有） -->
+                <li id="userInfo" style="display: none; align-items: center; gap: 10px;">
+                    <span id="currentUsername" style="color: var(--accent-color); font-weight: bold;"></span>
+                    <a href="javascript:;" id="logoutBtn" style="color: #ccc; text-decoration: none;">退出</a>
+                </li>
             </ul>
         </nav>
     </header>
@@ -97,12 +111,15 @@
             <div class="share-links">
                 <span>分享到：</span>
                 <a href="javascript:alert('已复制链接，可粘贴到微信分享！')">微信</a>
-                <a href="https://service.weibo.com/share/share.php?url=http://127.0.0.1:3000/final_work/html/categories.html&title=龚达图书馆" target="_blank">微博</a>
-                <a href="https://connect.qq.com/widget/shareqq/index.html?url=http://127.0.0.1:3000/final_work/html/categories.html&title=龚达图书馆" target="_blank">QQ</a>
+                <a href="https://service.weibo.com/share/share.php?url=http://127.0.0.1:3000/final_work/html/categories.html&title=龚达图书馆"
+                    target="_blank">微博</a>
+                <a href="https://connect.qq.com/widget/shareqq/index.html?url=http://127.0.0.1:3000/final_work/html/categories.html&title=龚达图书馆"
+                    target="_blank">QQ</a>
             </div>
         </div>
     </footer>
     <button id="backToTop" class="back-to-top" onclick="window.scrollTo(0,0)">↑</button>
     <script src="../js/script.js"></script>
 </body>
+
 </html>

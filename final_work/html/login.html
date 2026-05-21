@@ -32,116 +32,31 @@
                     <label for="password">密码:</label>
                     <input type="password" id="password" required>
                 </div>
-                <button type="button" onclick="handleLogin()">登录</button>
+                <button type="submit" class="login-btn">登录</button>
             </form>
 
             <!-- 注册表单（复用所有样式） -->
+            <!-- 注册表单（必须和登录表单同级，class完全一样） -->
             <form id="register-form" class="login-form" style="display: none;">
-                <h2>用户注册</h2>
-                <p class="subtitle">欢迎加入龚达图书馆</p>
-                <div class="input-group">
-                    <label for="reg-username">用户名:</label>
-                    <input type="text" id="reg-username" required placeholder="请设置用户名">
+                <div class="form-group">
+                    <label>用户名</label>
+                    <input type="text" id="reg-username" placeholder="请输入用户名" required>
                 </div>
-                <div class="input-group">
-                    <label for="reg-password">密码:</label>
-                    <input type="password" id="reg-password" required placeholder="不少于6位">
+                <div class="form-group">
+                    <label>密码</label>
+                    <input type="password" id="reg-password" placeholder="请输入密码（至少6位）" required>
                 </div>
-                <div class="input-group">
-                    <label for="reg-repassword">确认密码:</label>
-                    <input type="password" id="reg-repassword" required placeholder="再次输入密码">
+                <div class="form-group">
+                    <label>确认密码</label>
+                    <input type="password" id="reg-repassword" placeholder="请再次输入密码" required>
                 </div>
-                <button type="button" onclick="handleRegister()">注册</button>
+                <button type="submit" class="login-btn">注册</button>
             </form>
         </div>
     </div>
 
     <script src="../js/script.js"></script>
-    <script>
-        // 标签页切换
-        function switchTab(type) {
-            const tabs = document.querySelectorAll('.tab-btn');
-            const forms = document.querySelectorAll('.login-form');
 
-            tabs[0].style.color = type === 'login' ? '#333' : '#666';
-            tabs[0].style.borderBottom = type === 'login' ? '2px solid #8B7355' : 'none';
-            tabs[1].style.color = type === 'register' ? '#333' : '#666';
-            tabs[1].style.borderBottom = type === 'register' ? '2px solid #8B7355' : 'none';
-
-            forms[0].style.display = type === 'login' ? 'block' : 'none';
-            forms[1].style.display = type === 'register' ? 'block' : 'none';
-        }
-
-        // 登录逻辑（兼容原有admin默认账号 + 注册用户）
-function handleLogin() {
-    const username = document.getElementById('username').value.trim();
-    const password = document.getElementById('password').value.trim();
-
-    // 1. 优先保留原有默认账号
-    if (username === 'admin' && password === '123456') {
-        alert('管理员登录成功！');
-        // ✅ 新增：保存当前登录用户
-        localStorage.setItem('library_user', username);
-        
-        const urlParams = new URLSearchParams(window.location.search);
-        const from = urlParams.get('from');
-        if (from === 'personal') {
-            window.location.href = 'personal.html';
-        } else {
-            window.location.href = 'index.html';
-        }
-        return;
-    }
-
-    // 2. 再验证注册的用户
-    const userList = JSON.parse(localStorage.getItem('libraryUsers') || '[]');
-    const user = userList.find(item => item.username === username && item.password === password);
-
-    if (user) {
-        alert('登录成功！');
-        // ✅ 新增：保存当前登录用户
-        localStorage.setItem('library_user', username);
-        
-        const urlParams = new URLSearchParams(window.location.search);
-        const from = urlParams.get('from');
-        if (from === 'personal') {
-            window.location.href = 'personal.html';
-        } else {
-            window.location.href = 'index.html';
-        }
-    } else {
-        alert('用户名或密码错误');
-    }
-}
-
-        // 注册逻辑
-        function handleRegister() {
-            const username = document.getElementById('reg-username').value.trim();
-            const password = document.getElementById('reg-password').value.trim();
-            const repassword = document.getElementById('reg-repassword').value.trim();
-
-            if (password.length < 6) {
-                alert('密码长度不能少于6位');
-                return;
-            }
-            if (password !== repassword) {
-                alert('两次密码不一致');
-                return;
-            }
-
-            const userList = JSON.parse(localStorage.getItem('libraryUsers') || '[]');
-            if (userList.some(item => item.username === username)) {
-                alert('用户名已存在');
-                return;
-            }
-
-            userList.push({ username, password });
-            localStorage.setItem('libraryUsers', JSON.stringify(userList));
-            alert('注册成功！请登录');
-            switchTab('login');
-            document.getElementById('register-form').reset();
-        }
-    </script>
 </body>
 
 </html>

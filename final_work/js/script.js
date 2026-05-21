@@ -511,102 +511,111 @@ const BorrowManager = {
 
   // --- 8. 表单验证（登录 & 注册 & 联系） ---
 // 默认账号列表（以后添加默认账号只需要在这里加，其他地方不用改）
+  // --- 8. 表单验证（登录 & 注册 & 联系） ---
+// 默认账号列表
 const validUsers = [
     { username: 'admin', password: '123456' },
     { username: 'user', password: '654321' }
 ];
 
-// 8.1. 标签页切换逻辑
-const tabBtns = document.querySelectorAll('.tab-btn');
-const forms = document.querySelectorAll('.login-form');
+// ✅ 只在登录页执行，避免影响其他页面
+if (document.getElementById('login-form') && document.getElementById('register-form')) {
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const forms = document.querySelectorAll('.login-form');
 
-tabBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-        // 移除所有激活状态
-        tabBtns.forEach(b => {
-            b.classList.remove('active');
-            b.style.color = '#666';
-            b.style.borderBottom = 'none';
+    // 标签切换（纯索引匹配，不依赖任何属性）
+    tabBtns.forEach((btn, index) => {
+        btn.addEventListener('click', () => {
+            // 重置所有状态
+            tabBtns.forEach(b => {
+                b.classList.remove('active');
+                b.style.color = '#666';
+                b.style.borderBottom = 'none';
+            });
+            forms.forEach(f => f.style.display = 'none');
+
+            // 激活当前
+            btn.classList.add('active');
+            btn.style.color = '#333';
+            btn.style.borderBottom = '2px solid #8B7355';
+            forms[index].style.display = 'block';
         });
-        forms.forEach(f => f.style.display = 'none');
-
-        // 设置当前激活状态
-        btn.classList.add('active');
-        btn.style.color = '#333';
-        btn.style.borderBottom = '2px solid #8B7355';
-        const targetTab = btn.dataset.tab;
-        document.getElementById(`${targetTab}-form`).style.display = 'block';
     });
-});
 
-// 8.2. 登录表单提交（完全复用validUsers数组，同时支持注册用户）
-// 8.2. 登录表单提交（完全复用validUsers数组，同时支持注册用户）
-const loginForm = document.getElementById('login-form');
-if (loginForm) {
+            // ✅ 登录表单（现在按钮是submit类型，用表单事件）
+    const loginForm = document.getElementById('login-form');
     loginForm.addEventListener('submit', (e) => {
         e.preventDefault();
+        e.stopImmediatePropagation();
+
         const username = document.getElementById('username').value.trim();
         const password = document.getElementById('password').value;
 
-        // 基础验证
         if (!username) { alert('请输入用户名！'); return; }
+        if (!password) { alert('请输入密码！'); return; }
 
-        // 第一步：验证默认账号（validUsers数组）
+        // 验证默认账号
         let user = validUsers.find(u => u.username === username);
-        
-        // 第二步：如果不是默认账号，验证本地注册的用户
+        // 验证注册用户
         if (!user) {
             const registeredUsers = JSON.parse(localStorage.getItem('libraryUsers') || '[]');
             user = registeredUsers.find(u => u.username === username);
         }
 
-        // 验证密码
         if (!user) { alert('用户名不存在！'); return; }
         if (user.password !== password) { alert('密码错误！'); return; }
 
-        // 登录成功：同步设置两个登录状态键（统一状态）
-        localStorage.setItem('library_user', username); // 用户名
-        localStorage.setItem('isLogin', 'true'); // 登录标记（兼容personal.html）
+        // 登录成功
+        localStorage.setItem('library_user', username);
+        localStorage.setItem('isLogin', 'true');
         alert('登录成功！');
         window.location.href = 'index.html';
     });
-}
 
-// 8.3. 注册表单提交
-const registerForm = document.getElementById('register-form');
-if (registerForm) {
+    // ✅ 注册表单（单独绑定，和登录完全隔离）
+    const registerForm = document.getElementById('register-form');
     registerForm.addEventListener('submit', (e) => {
         e.preventDefault();
+        e.stopImmediatePropagation(); // 阻止事件冒泡，彻底避免串扰
+
         const username = document.getElementById('reg-username').value.trim();
         const password = document.getElementById('reg-password').value.trim();
         const repassword = document.getElementById('reg-repassword').value.trim();
 
-        // 基础验证
         if (!username) { alert('请输入用户名！'); return; }
         if (password.length < 6) { alert('密码长度不能少于6位！'); return; }
         if (password !== repassword) { alert('两次输入的密码不一致！'); return; }
 
-        // 检查用户名是否已被使用（默认账号+注册账号）
+        // 检查用户名
         const isDefaultUser = validUsers.some(u => u.username === username);
         const registeredUsers = JSON.parse(localStorage.getItem('libraryUsers') || '[]');
-        const isRegisteredUser = registeredUsers.some(u => u.username === username);
-
-        if (isDefaultUser || isRegisteredUser) {
-            alert('该用户名已被注册，请更换用户名！');
+        if (isDefaultUser || registeredUsers.some(u => u.username === username)) {
+            alert('该用户名已被注册！');
             return;
         }
 
-        // 保存注册用户
+        // 保存用户
         registeredUsers.push({ username, password });
         localStorage.setItem('libraryUsers', JSON.stringify(registeredUsers));
         alert('注册成功！请登录');
 
-        // 自动切换到登录页并清空表单
-        tabBtns[0].click();
+        // ✅ 手动切换到登录页，不调用任何click事件
+        tabBtns[0].classList.add('active');
+        tabBtns[0].style.color = '#333';
+        tabBtns[0].style.borderBottom = '2px solid #8B7355';
+        tabBtns[1].classList.remove('active');
+        tabBtns[1].style.color = '#666';
+        tabBtns[1].style.borderBottom = 'none';
+        forms[0].style.display = 'block';
+        forms[1].style.display = 'none';
+
+        // 清空所有表单
         registerForm.reset();
+        loginForm.reset();
     });
 }
 
+// 联系表单（保留原有逻辑）
     const contactForm = document.getElementById('contactForm');
     if (contactForm) {
         contactForm.addEventListener('submit', (e) => {
